@@ -39,24 +39,51 @@
           console.log(productOrder);
           const productDetailsElement =
             document.getElementById("product-details");
+
+          // Format sustainabilities, allergens, and alternatives data
           const sustainabilities = productOrder.sustainabilities
             .map(
               (s) => `
             <li>
-              <strong>${s.label_name}</strong>: Eco Score - ${
-                s.eco_score
-              }, Bio Certified - ${
+              <strong>${s.label_name}</strong>: Eco Score - ${s.eco_score}, Bio Certified - ${
                 s.bio_certified ? "Yes" : "No"
               }, Animal Friendly Score - ${s.animal_friendly_score}
             </li>
           `
             )
             .join("");
+          
+          const allergens = productOrder.allergens
+            .map(
+              (a) => `
+            <li>
+              <strong>${a.name}</strong>: ${a.description}
+            </li>
+          `
+            )
+            .join("");
+          
+          const alternatives = productOrder.alternatives
+            .map(
+              (alt) => `
+            <li>
+              Alternative Product ID: ${alt.alternative_product_id} - ${alt.reason}
+            </li>
+          `
+            )
+            .join("");
+
           productDetailsElement.innerHTML = `
             <h3>${productOrder.name}</h3>
+            <p>Brand: ${productOrder.brand.name}</p>
+            <p>Category: ${productOrder.categorie.name}</p>
             <p>Price: €${productOrder.price}</p>
             <h4>Sustainability Details:</h4>
             <ul>${sustainabilities}</ul>
+            <h4>Allergens:</h4>
+            <ul>${allergens}</ul>
+            <h4>Alternative Products:</h4>
+            <ul>${alternatives}</ul>
           `;
         } catch (error) {
           console.error("Error fetching the product details:", error);
