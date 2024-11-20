@@ -97,9 +97,15 @@
         </div>
       </div>
     </div>
+
+    <!-- Audio elements for notification sounds -->
+    <audio id="notification-sound" src="pop-up.mp3" preload="auto"></audio>
+    <audio id="kaching-sound" src="kaching.mp3" preload="auto"></audio>
+
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
     <script>
       const placeholderImage = "https://via.placeholder.com/350x150";
+      let previousProductCount = 0;
 
       // Fetch all scanned products and display them
       async function fetchAllScannedProducts() {
@@ -113,6 +119,11 @@
 
           const productListElement = document.getElementById("product-list");
           productListElement.innerHTML = ""; // Clear existing content
+
+          if (productsOrders.length > previousProductCount) {
+            document.getElementById("notification-sound").play();
+          }
+          previousProductCount = productsOrders.length;
 
           if (productsOrders.length > 0) {
             productsOrders.forEach((productOrder) => {
@@ -270,6 +281,7 @@
 
           const responseData = await response.json();
           console.log("Order finalized successfully:", responseData);
+          document.getElementById("kaching-sound").play();
         } catch (error) {
           console.error("There was a problem with the fetch operation:", error);
         }
